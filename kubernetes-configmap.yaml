@@ -1,0 +1,45 @@
+- name: Create a ConfigMap for the pem file.
+  kubernetes.core.k8s:
+    state: present
+    validate:
+      fail_on_error: yes
+      strict: yes
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: pem-file
+        namespace: your-namespace
+      data:
+       root-ca.pem: "{{ lookup('file', 'path to the pem file') }}"
+
+- name: Deployment of pods to get the files inside the pod
+  vars:
+  kubernetes.core.k8s:
+    state: present
+    validate:
+      fail_on_error: yes
+      strict: yes
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: app-name
+        namespace: your-namespace
+      spec:
+            volumes:
+              - name: pem-file-path
+                configMap:
+                  name: pem-file
+            containers:
+              - name: container-name
+                image: image
+                ports:
+                  - name: http
+                    containerPort: 8080
+                volumeMounts:
+                  - name: pem-file-path
+                    mountPath: folder-to-keep/file-name
+                    subPath: file-name
+                    readOnly: false
+         
