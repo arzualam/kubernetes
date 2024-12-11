@@ -1,5 +1,5 @@
 # kubernetes Secrets
-## How to add a certificate to kubernetes with ansible. 
+## How to add a certificate to kubernetes with ansible by using kubernetes Module. 
 
 Certificates can be managed in 2 ways, first and most desired way is to create a secret from the certificate file and add it as volume to the containers. Here I am  providing the sniphet for a deployment file with ansible.
 
